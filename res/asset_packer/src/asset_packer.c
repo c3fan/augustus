@@ -35,7 +35,7 @@
 
 #define ASSETS_IMAGE_SIZE 2048
 #define CURSOR_IMAGE_SIZE 256
-#define PACKED_ASSETS_DIR "packed_assets"
+#define PACKED_ASSETS_DIR "../packed_assets"
 #define CURSORS_DIR "Cursors"
 #define CURSORS_NAME "Color_Cursors"
 #define BYTES_PER_PIXEL 4
