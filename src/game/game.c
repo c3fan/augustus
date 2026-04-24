@@ -43,10 +43,8 @@ static void errlog(const char *msg)
     log_error(msg, 0, 0);
 }
 
-// Saves the last successfully detected game language so the editor can reuse it.
-// c3_map.eng group-1/index-1 is not a "New Game" string, so
-// locale_determine_language() misidentifies it as English when the editor loads.
-// Skipping detection in editor mode and reusing the saved language fixes this.
+// Saves the last successfully detected game language so the editor can fall back to it
+// if language detection fails (e.g. if c3.eng is temporarily unavailable).
 static language_type saved_game_language = LANGUAGE_UNKNOWN;
 
 static encoding_type update_encoding(int is_editor)
@@ -58,9 +56,19 @@ static encoding_type update_encoding(int is_editor)
             saved_game_language = language;
         }
     } else {
-        // In editor mode, skip locale_determine_language() entirely:
-        // c3_map.eng has different group-1/index-1 content that does not
-        // represent a language tag and leads to wrong detection.
+        // In editor mode, c3_map.eng has different group-1/index-1 content that does
+        // not represent a language tag, so locale_determine_language() misidentifies it.
+        // Temporarily load c3.eng to detect the language correctly, then reload c3_map.eng
+        // so that game option language changes while the editor is open are also handled.
+        if (lang_load(0)) {
+            language = locale_determine_language();
+            if (language != LANGUAGE_UNKNOWN) {
+                saved_game_language = language;
+            }
+            if (!lang_load(1)) {
+                errlog("'c3_map.eng' or 'c3_map_mm.eng' files not found or too large.");
+            }
+        }
         language = saved_game_language;
     }
     encoding_type encoding = encoding_determine(language);
