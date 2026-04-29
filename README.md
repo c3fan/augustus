@@ -74,6 +74,10 @@ Augustus changes are explained in detail in the comprehensive manual. Below you 
 |Polish   |[Download](https://github.com/Keriew/augustus/raw/master/res/translated_manuals/augustus_manual_polish_3.0.pdf)|
 |Russian   |[Download](https://github.com/Keriew/augustus/raw/master/res/translated_manuals/augustus_manual_russian_3.0.pdf)|
 
+## Developer reference
+
+- [Architecture reference](doc/ARCHITECTURE.md) — high-level technical design, subsystem ownership, runtime flow, and future development memory
+
 ## Bugs
 
 See the list of [Bugs & idiosyncrasies](https://github.com/bvschaik/julius/wiki/Caesar-3-bugs) to find out more about some known bugs.
