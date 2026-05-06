@@ -2063,6 +2063,21 @@ static translation_string all_strings[] = {
     {TR_TOOLTIP_OVERLAY_PROBLEMS_DEPOT_NO_INSTRUCTIONS, "無指令"},
     {TR_CONFIG_GRANARY_DEFAULT_TO_PASS_ALL_WALKERS, "谷倉默认不允许行人通过"},
     {TR_CONFIG_WAREHOUSE_DEFAULT_TO_PASS_ALL_WALKERS, "倉庫默认不允许行人通过"},
+    {TR_EDITOR_SCENARIO_CHANGE_MODEL_DATA, "更改模型數据"},
+    {TR_EDITOR_PRICE_CHANGE, "價格變動"},
+    {TR_EDITOR_PRICE_CHANGES, "價格變動"},
+    {TR_EDITOR_DEMAND_CHANGE, "需求變更"},
+    {TR_EDITOR_DEMAND_CHANGES, "需求變更"},
+    {TR_WINDOW_ADVISOR_EPITHETS, "神力"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP, "宏偉神廟賜予的神力"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_CERES, "塞麗絲的神力"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_NEPTUNE, "納普敦的神力"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_MERCURY, "莫丘里的神力"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_MARS, "馬爾斯的神力"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_VENUS, "維納斯的神力"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_PANTHEON, "萬神殿的神力"},
+    {TR_FIGURE_TYPE_PLEBIAN, "平民"},
+    {TR_CONFIG_GP_CH_HOUSING_DO_NOT_SPAWN_PLEBIANS, "居民房屋不會產生漫遊平民"},
 };
 
 void translation_traditional_chinese(const translation_string **strings, int *num_strings)

@@ -2060,6 +2060,21 @@ static translation_string all_strings[] = {
     {TR_TOOLTIP_OVERLAY_PROBLEMS_DEPOT_NO_INSTRUCTIONS, "无指令"},
     {TR_CONFIG_GRANARY_DEFAULT_TO_PASS_ALL_WALKERS, "谷仓默认不允许行人通过"},
     {TR_CONFIG_WAREHOUSE_DEFAULT_TO_PASS_ALL_WALKERS, "仓库默认不允许行人通过"},
+    {TR_EDITOR_SCENARIO_CHANGE_MODEL_DATA, "更改模型数据"},
+    {TR_EDITOR_PRICE_CHANGE, "价格变动"},
+    {TR_EDITOR_PRICE_CHANGES, "价格变动"},
+    {TR_EDITOR_DEMAND_CHANGE, "需求变更"},
+    {TR_EDITOR_DEMAND_CHANGES, "需求变更"},
+    {TR_WINDOW_ADVISOR_EPITHETS, "神灵恩赐"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP, "宏伟神庙赐予的神灵恩赐"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_CERES, "塞丽丝的神灵恩赐"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_NEPTUNE, "纳普敦的神灵恩赐"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_MERCURY, "莫丘里的神灵恩赐"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_MARS, "马尔斯的神灵恩赐"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_VENUS, "维纳斯的神灵恩赐"},
+    {TR_WINDOW_ADVISOR_EPITHETS_TOOLTIP_PANTHEON, "万神殿的神灵恩赐"},
+    {TR_FIGURE_TYPE_PLEBIAN, "平民"},
+    {TR_CONFIG_GP_CH_HOUSING_DO_NOT_SPAWN_PLEBIANS, "居民房屋不会产生漫游平民"},
 };
 
 void translation_simplified_chinese(const translation_string **strings, int *num_strings)
