@@ -43,25 +43,27 @@ static const uint8_t NEW_GAME_CZECH[]              = { 0x4e, 0x6f, 0x76, 0xe1, 0
 static const uint8_t NEW_GAME_UKRAINIAN[]          = { 0xcd, 0xee, 0xe2, 0xe0, 0x20, 0xe3, 0xf0, 0xe0, 0 };
 
 /* Central language registry.
- * Each row: {language_type, log_name, new_game_bytes, encoding, loader_fn}
+ * Columns: {type, name, new_game_bytes, encoding, loader,
+ *           year_before_ad, translate_money_dn, paragraph_indent, translate_rank_autosaves}
  * Ordered to match the LANGUAGE_* enum in core/locale.h for clarity. */
 static const language_info REGISTRY[] = {
-    { LANGUAGE_ENGLISH,            "English",            NEW_GAME_ENGLISH,            ENCODING_WESTERN_EUROPE,     translation_english            },
-    { LANGUAGE_FRENCH,             "French",             NEW_GAME_FRENCH,             ENCODING_WESTERN_EUROPE,     translation_french             },
-    { LANGUAGE_GERMAN,             "German",             NEW_GAME_GERMAN,             ENCODING_WESTERN_EUROPE,     translation_german             },
-    { LANGUAGE_ITALIAN,            "Italian",            NEW_GAME_ITALIAN,            ENCODING_WESTERN_EUROPE,     translation_italian            },
-    { LANGUAGE_SPANISH,            "Spanish",            NEW_GAME_SPANISH,            ENCODING_WESTERN_EUROPE,     translation_spanish            },
-    { LANGUAGE_JAPANESE,           "Japanese",           NEW_GAME_JAPANESE,           ENCODING_JAPANESE,           translation_japanese           },
-    { LANGUAGE_KOREAN,             "Korean",             NEW_GAME_KOREAN,             ENCODING_KOREAN,             translation_korean             },
-    { LANGUAGE_POLISH,             "Polish",             NEW_GAME_POLISH,             ENCODING_EASTERN_EUROPE,     translation_polish             },
-    { LANGUAGE_PORTUGUESE,         "Portuguese",         NEW_GAME_PORTUGUESE,         ENCODING_WESTERN_EUROPE,     translation_portuguese         },
-    { LANGUAGE_RUSSIAN,            "Russian",            NEW_GAME_RUSSIAN,            ENCODING_CYRILLIC,           translation_russian            },
-    { LANGUAGE_SWEDISH,            "Swedish",            NEW_GAME_SWEDISH,            ENCODING_WESTERN_EUROPE,     translation_swedish            },
-    { LANGUAGE_SIMPLIFIED_CHINESE, "Simplified Chinese", NEW_GAME_SIMPLIFIED_CHINESE, ENCODING_SIMPLIFIED_CHINESE, translation_simplified_chinese },
-    { LANGUAGE_TRADITIONAL_CHINESE, "Traditional Chinese", NEW_GAME_TRADITIONAL_CHINESE, ENCODING_TRADITIONAL_CHINESE, translation_traditional_chinese },
-    { LANGUAGE_CZECH,              "Czech",              NEW_GAME_CZECH,              ENCODING_CZECH,              translation_czech              },
-    { LANGUAGE_GREEK,              "Greek",              NEW_GAME_GREEK,              ENCODING_GREEK,              translation_greek              },
-    { LANGUAGE_UKRAINIAN,          "Ukrainian",          NEW_GAME_UKRAINIAN,          ENCODING_CYRILLIC,           translation_ukrainian          },
+  /*                                                                                          yr  dn  indent  autosaves */
+    { LANGUAGE_ENGLISH,             "English",            NEW_GAME_ENGLISH,            ENCODING_WESTERN_EUROPE,     translation_english,             0,  1,  50,  1 },
+    { LANGUAGE_FRENCH,              "French",             NEW_GAME_FRENCH,             ENCODING_WESTERN_EUROPE,     translation_french,              1,  1,  50,  1 },
+    { LANGUAGE_GERMAN,              "German",             NEW_GAME_GERMAN,             ENCODING_WESTERN_EUROPE,     translation_german,              1,  1,  50,  1 },
+    { LANGUAGE_ITALIAN,             "Italian",            NEW_GAME_ITALIAN,            ENCODING_WESTERN_EUROPE,     translation_italian,             1,  1,  50,  1 },
+    { LANGUAGE_SPANISH,             "Spanish",            NEW_GAME_SPANISH,            ENCODING_WESTERN_EUROPE,     translation_spanish,             1,  1,  50,  1 },
+    { LANGUAGE_JAPANESE,            "Japanese",           NEW_GAME_JAPANESE,           ENCODING_JAPANESE,           translation_japanese,            1,  1,  17,  0 },
+    { LANGUAGE_KOREAN,              "Korean",             NEW_GAME_KOREAN,             ENCODING_KOREAN,             translation_korean,              1,  0,  50,  0 },
+    { LANGUAGE_POLISH,              "Polish",             NEW_GAME_POLISH,             ENCODING_EASTERN_EUROPE,     translation_polish,              1,  1,  50,  1 },
+    { LANGUAGE_PORTUGUESE,          "Portuguese",         NEW_GAME_PORTUGUESE,         ENCODING_WESTERN_EUROPE,     translation_portuguese,          1,  1,  50,  1 },
+    { LANGUAGE_RUSSIAN,             "Russian",            NEW_GAME_RUSSIAN,            ENCODING_CYRILLIC,           translation_russian,             1,  1,  50,  1 },
+    { LANGUAGE_SWEDISH,             "Swedish",            NEW_GAME_SWEDISH,            ENCODING_WESTERN_EUROPE,     translation_swedish,             1,  1,  50,  1 },
+    { LANGUAGE_SIMPLIFIED_CHINESE,  "Simplified Chinese", NEW_GAME_SIMPLIFIED_CHINESE, ENCODING_SIMPLIFIED_CHINESE, translation_simplified_chinese,  1,  1,  50,  0 },
+    { LANGUAGE_TRADITIONAL_CHINESE, "Traditional Chinese", NEW_GAME_TRADITIONAL_CHINESE, ENCODING_TRADITIONAL_CHINESE, translation_traditional_chinese, 1,  1,  50,  0 },
+    { LANGUAGE_CZECH,               "Czech",              NEW_GAME_CZECH,              ENCODING_CZECH,              translation_czech,               1,  1,  50,  1 },
+    { LANGUAGE_GREEK,               "Greek",              NEW_GAME_GREEK,              ENCODING_GREEK,              translation_greek,               1,  1,  50,  1 },
+    { LANGUAGE_UKRAINIAN,           "Ukrainian",          NEW_GAME_UKRAINIAN,          ENCODING_CYRILLIC,           translation_ukrainian,           1,  1,  50,  1 },
 };
 
 #define REGISTRY_COUNT (int)(sizeof(REGISTRY) / sizeof(language_info))
