@@ -3,6 +3,7 @@
 #include "core/encoding.h"
 #include "core/log.h"
 #include "core/string.h"
+#include "translation/language_registry.h"
 
 #include <string.h>
 
@@ -37,59 +38,15 @@ void translation_load(language_type language)
     int num_strings = 0;
     const translation_string *default_strings = NULL;
     int num_default_strings = 0;
-    translation_english(&default_strings, &num_default_strings);
 
-    switch (language) {
-        case LANGUAGE_ENGLISH:
-            translation_english(&strings, &num_strings);
-            break;
-        case LANGUAGE_FRENCH:
-            translation_french(&strings, &num_strings);
-            break;
-        case LANGUAGE_GERMAN:
-            translation_german(&strings, &num_strings);
-            break;
-        case LANGUAGE_GREEK:
-            translation_greek(&strings, &num_strings);
-            break;
-        case LANGUAGE_ITALIAN:
-            translation_italian(&strings, &num_strings);
-            break;
-        case LANGUAGE_JAPANESE:
-            translation_japanese(&strings, &num_strings);
-            break;
-        case LANGUAGE_KOREAN:
-            translation_korean(&strings, &num_strings);
-            break;
-        case LANGUAGE_POLISH:
-            translation_polish(&strings, &num_strings);
-            break;
-        case LANGUAGE_PORTUGUESE:
-            translation_portuguese(&strings, &num_strings);
-            break;
-        case LANGUAGE_RUSSIAN:
-            translation_russian(&strings, &num_strings);
-            break;
-        case LANGUAGE_SPANISH:
-            translation_spanish(&strings, &num_strings);
-            break;
-        case LANGUAGE_SWEDISH:
-            translation_swedish(&strings, &num_strings);
-            break;
-        case LANGUAGE_SIMPLIFIED_CHINESE:
-            translation_simplified_chinese(&strings, &num_strings);
-            break;
-        case LANGUAGE_TRADITIONAL_CHINESE:
-            translation_traditional_chinese(&strings, &num_strings);
-            break;
-        case LANGUAGE_CZECH:
-            translation_czech(&strings, &num_strings);
-            break;
-        case LANGUAGE_UKRAINIAN:
-            translation_ukrainian(&strings, &num_strings);
-            break;
-        default:
-            log_error("Invalid translation selected", 0, 0);
+    const language_info *english = language_registry_get(LANGUAGE_ENGLISH);
+    english->load(&default_strings, &num_default_strings);
+
+    const language_info *info = language_registry_get(language);
+    if (info) {
+        info->load(&strings, &num_strings);
+    } else {
+        log_error("Invalid translation selected", 0, 0);
     }
 
     memset(data.strings, 0, sizeof(data.strings));

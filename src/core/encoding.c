@@ -6,6 +6,7 @@
 #include "core/encoding_trad_chinese.h"
 #include "core/locale.h"
 #include "core/string.h"
+#include "translation/language_registry.h"
 
 #include <stdlib.h>
 
@@ -855,48 +856,48 @@ static const letter_code *get_letter_code_for_combining_utf8(const char *prev_ch
 
 encoding_type encoding_determine(language_type language)
 {
-    // Determine encoding based on language:
-    // - Windows-1250 (Central/Eastern Europe) is used in Polish only
-    // - Windows-1251 (Cyrillic) is used in Ukrainian and Russian only
-    // - Windows-1253 (Greek) is used in Greek only
-    // - Windows-950 (Big5) is used in Traditional Chinese only
-    // - Combination of Windows-1250/1252 is used in Czech fan translation
-    // - Windows-1252 (Western Europe) is used in all other languages
-    if (language == LANGUAGE_POLISH) {
-        data.to_utf8_table = HIGH_TO_UTF8_EASTERN;
-        data.encoding = ENCODING_EASTERN_EUROPE;
-    } else if (language == LANGUAGE_CZECH) {
-        data.to_utf8_table = HIGH_TO_UTF8_CZECH;
-        data.encoding= ENCODING_CZECH;
-    } else if (language == LANGUAGE_RUSSIAN) {
-        data.to_utf8_table = HIGH_TO_UTF8_CYRILLIC;
-        data.encoding = ENCODING_CYRILLIC;
-    } else if (language == LANGUAGE_GREEK) {
-        data.to_utf8_table = HIGH_TO_UTF8_GREEK;
-        data.encoding = ENCODING_GREEK;
-    } else if (language == LANGUAGE_TRADITIONAL_CHINESE) {
-        encoding_trad_chinese_init();
-        data.to_utf8_table = NULL;
-        data.encoding = ENCODING_TRADITIONAL_CHINESE;
-    } else if (language == LANGUAGE_SIMPLIFIED_CHINESE) {
-        encoding_simp_chinese_init();
-        data.to_utf8_table = NULL;
-        data.encoding = ENCODING_SIMPLIFIED_CHINESE;
-    } else if (language == LANGUAGE_KOREAN) {
-        encoding_korean_init();
-        data.to_utf8_table = NULL;
-        data.encoding = ENCODING_KOREAN;
-    } else if (language == LANGUAGE_JAPANESE) {
-        encoding_japanese_init();
-        data.to_utf8_table = NULL;
-        data.encoding = ENCODING_JAPANESE;
-    } else if (language == LANGUAGE_UKRAINIAN) {
-        data.to_utf8_table = HIGH_TO_UTF8_CYRILLIC;
-        data.encoding = ENCODING_CYRILLIC;
-    } else { // assume Western encoding
-        data.to_utf8_table = HIGH_TO_UTF8_DEFAULT;
-        data.encoding = ENCODING_WESTERN_EUROPE;
+    // Look up encoding from the central language registry
+    const language_info *info = language_registry_get(language);
+    encoding_type enc = info ? info->encoding : ENCODING_WESTERN_EUROPE;
+
+    // Configure the to_utf8 conversion table and run any encoding-specific
+    // initialisation.  These are properties of the encoding, not the language,
+    // so the switch is on encoding_type (which has far fewer values than
+    // language_type and won't grow when new languages are added).
+    switch (enc) {
+        case ENCODING_EASTERN_EUROPE:
+            data.to_utf8_table = HIGH_TO_UTF8_EASTERN;
+            break;
+        case ENCODING_CZECH:
+            data.to_utf8_table = HIGH_TO_UTF8_CZECH;
+            break;
+        case ENCODING_CYRILLIC:
+            data.to_utf8_table = HIGH_TO_UTF8_CYRILLIC;
+            break;
+        case ENCODING_GREEK:
+            data.to_utf8_table = HIGH_TO_UTF8_GREEK;
+            break;
+        case ENCODING_TRADITIONAL_CHINESE:
+            encoding_trad_chinese_init();
+            data.to_utf8_table = NULL;
+            break;
+        case ENCODING_SIMPLIFIED_CHINESE:
+            encoding_simp_chinese_init();
+            data.to_utf8_table = NULL;
+            break;
+        case ENCODING_KOREAN:
+            encoding_korean_init();
+            data.to_utf8_table = NULL;
+            break;
+        case ENCODING_JAPANESE:
+            encoding_japanese_init();
+            data.to_utf8_table = NULL;
+            break;
+        default: // ENCODING_WESTERN_EUROPE and anything unrecognised
+            data.to_utf8_table = HIGH_TO_UTF8_DEFAULT;
+            break;
     }
+    data.encoding = enc;
     build_reverse_lookup_table();
     build_decomposed_lookup_table();
     return data.encoding;
