@@ -86,4 +86,9 @@ const language_info *language_registry_get(language_type language);
  */
 const language_info *language_registry_all(int *count);
 
+/**
+ * Returns the default translation language used as the fallback string source.
+ */
+const language_info *language_registry_get_default(void);
+
 #endif // TRANSLATION_LANGUAGE_REGISTRY_H

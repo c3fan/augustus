@@ -83,7 +83,7 @@ static const language_info REGISTRY[] = {
     { LANGUAGE_RUSSIAN,             "Russian",            NEW_GAME_RUSSIAN,            ENCODING_CYRILLIC,           translation_russian,             1,  1,  50,  1,  NULL,                         NULL                  },
     { LANGUAGE_SWEDISH,             "Swedish",            NEW_GAME_SWEDISH,            ENCODING_WESTERN_EUROPE,     translation_swedish,             1,  1,  50,  1,  NULL,                         NULL                  },
     { LANGUAGE_SIMPLIFIED_CHINESE,  "Simplified Chinese", NEW_GAME_SIMPLIFIED_CHINESE, ENCODING_SIMPLIFIED_CHINESE, translation_simplified_chinese,  1,  1,  50,  0,  NULL,                         NULL                  },
-    { LANGUAGE_TRADITIONAL_CHINESE, "Traditional Chinese", NEW_GAME_TRADITIONAL_CHINESE, ENCODING_TRADITIONAL_CHINESE, translation_traditional_chinese, 1, 1, 50, 0, NULL,                         NULL                  },
+    { LANGUAGE_TRADITIONAL_CHINESE, "Traditional Chinese", NEW_GAME_TRADITIONAL_CHINESE, ENCODING_TRADITIONAL_CHINESE, translation_traditional_chinese, 1,  1,  50,  0,  NULL,                         NULL                  },
     { LANGUAGE_CZECH,               "Czech",              NEW_GAME_CZECH,              ENCODING_CZECH,              translation_czech,               1,  1,  50,  1,  NULL,                         NULL                  },
     { LANGUAGE_GREEK,               "Greek",              NEW_GAME_GREEK,              ENCODING_GREEK,              translation_greek,               1,  1,  50,  1,  NULL,                         NULL                  },
     { LANGUAGE_UKRAINIAN,           "Ukrainian",          NEW_GAME_UKRAINIAN,          ENCODING_CYRILLIC,           translation_ukrainian,           1,  1,  50,  1,  NULL,                         NULL                  },
@@ -105,4 +105,14 @@ const language_info *language_registry_all(int *count)
 {
     *count = REGISTRY_COUNT;
     return REGISTRY;
+}
+
+const language_info *language_registry_get_default(void)
+{
+    for (int i = 0; i < REGISTRY_COUNT; i++) {
+        if (REGISTRY[i].type == LANGUAGE_ENGLISH) {
+            return &REGISTRY[i];
+        }
+    }
+    return REGISTRY_COUNT ? &REGISTRY[0] : NULL;
 }

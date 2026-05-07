@@ -39,8 +39,10 @@ void translation_load(language_type language)
     const translation_string *default_strings = NULL;
     int num_default_strings = 0;
 
-    const language_info *english = language_registry_get(LANGUAGE_ENGLISH);
-    english->load(&default_strings, &num_default_strings);
+    const language_info *default_info = language_registry_get_default();
+    if (default_info) {
+        default_info->load(&default_strings, &num_default_strings);
+    }
 
     const language_info *info = language_registry_get(language);
     if (info) {
