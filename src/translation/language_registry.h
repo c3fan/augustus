@@ -50,6 +50,30 @@ typedef struct {
      * the original game used numeric 01_ prefixes instead.
      */
     int translate_rank_autosaves;
+
+    /** Content-patch hooks (may be NULL) **/
+
+    /**
+     * Optional hook to override a raw text entry from the .mm message file.
+     * @param offset  The raw byte offset that would normally be looked up.
+     * @return A replacement string, or NULL to use the original data.
+     *
+     * Use this to work around known errors in the original game's message data
+     * for a specific language (e.g. the German "city retaken" message).
+     */
+    const uint8_t *(*message_text_override)(int32_t offset);
+
+    /**
+     * Optional hook to override a specific (group, index) string from the
+     * .eng text file.
+     * @param group  String group number.
+     * @param index  String index within the group.
+     * @return A replacement string, or NULL to use the original data.
+     *
+     * Use this to work around known errors in the original game's text file
+     * for a specific language (e.g. the Korean "Doctors Clinic" name).
+     */
+    const uint8_t *(*string_override)(int group, int index);
 } language_info;
 
 /**

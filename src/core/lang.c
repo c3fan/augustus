@@ -6,6 +6,7 @@
 #include "core/io.h"
 #include "core/log.h"
 #include "core/string.h"
+#include "translation/language_registry.h"
 #include "translation/translation.h"
 
 #include <stdlib.h>
@@ -89,11 +90,11 @@ static const uint8_t *get_message_text(int32_t offset)
         return 0;
     }
     //locale-dependent fixes
-    language_type l_type = locale_last_determined_language();
-    if (l_type == LANGUAGE_GERMAN && offset == 289) {
-        const uint8_t *try_translation = translation_for(TR_FIX_GERMAN_CITY_RETAKEN);
-        if (try_translation) {
-            return (uint8_t *) try_translation;
+    const language_info *info = language_registry_get(locale_last_determined_language());
+    if (info && info->message_text_override) {
+        const uint8_t *override = info->message_text_override(offset);
+        if (override) {
+            return override;
         }
     }
     return &data.message_data[offset];
@@ -362,11 +363,11 @@ int lang_load(int is_editor)
 const uint8_t *lang_get_string(int group, int index)
 {
     //locale-dependent fixes
-    language_type l_type = locale_last_determined_language();
-    if (l_type == LANGUAGE_KOREAN && group == 28 && index == 46) {
-        const uint8_t *try_translation = translation_for(TR_FIX_KOREAN_BUILDING_DOCTORS_CLINIC);
-        if (try_translation) {
-            return try_translation;
+    const language_info *info = language_registry_get(locale_last_determined_language());
+    if (info && info->string_override) {
+        const uint8_t *override = info->string_override(group, index);
+        if (override) {
+            return override;
         }
     }
     //Custom translations
