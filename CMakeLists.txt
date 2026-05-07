@@ -732,25 +732,10 @@ set(EDITOR_FILES
     ${PROJECT_SOURCE_DIR}/src/editor/tool.c
     ${PROJECT_SOURCE_DIR}/src/editor/tool_restriction.c
 )
-set(TRANSLATION_FILES
-    ${PROJECT_SOURCE_DIR}/src/translation/czech.c
-    ${PROJECT_SOURCE_DIR}/src/translation/english.c
-    ${PROJECT_SOURCE_DIR}/src/translation/french.c
-    ${PROJECT_SOURCE_DIR}/src/translation/german.c
-    ${PROJECT_SOURCE_DIR}/src/translation/greek.c
-    ${PROJECT_SOURCE_DIR}/src/translation/italian.c
-    ${PROJECT_SOURCE_DIR}/src/translation/japanese.c
-    ${PROJECT_SOURCE_DIR}/src/translation/korean.c
-    ${PROJECT_SOURCE_DIR}/src/translation/language_registry.c
-    ${PROJECT_SOURCE_DIR}/src/translation/polish.c
-    ${PROJECT_SOURCE_DIR}/src/translation/portuguese.c
-    ${PROJECT_SOURCE_DIR}/src/translation/russian.c
-    ${PROJECT_SOURCE_DIR}/src/translation/simplified_chinese.c
-    ${PROJECT_SOURCE_DIR}/src/translation/spanish.c
-    ${PROJECT_SOURCE_DIR}/src/translation/swedish.c
-    ${PROJECT_SOURCE_DIR}/src/translation/traditional_chinese.c
-    ${PROJECT_SOURCE_DIR}/src/translation/translation.c
-    ${PROJECT_SOURCE_DIR}/src/translation/ukrainian.c
+# Intentionally glob translation sources so that adding a new translation_<lang>.c
+# file does not require updating this list in addition to the language registry.
+file(GLOB TRANSLATION_FILES CONFIGURE_DEPENDS
+    ${PROJECT_SOURCE_DIR}/src/translation/*.c
 )
 
 set(MACOSX_FILES "")

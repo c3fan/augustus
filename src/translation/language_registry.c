@@ -2,26 +2,6 @@
 
 #include <stddef.h>  /* NULL */
 
-/* Forward declarations for per-language translation loaders.
- * These are intentionally NOT declared in translation.h — they are
- * implementation details consumed exclusively by this registry. */
-void translation_czech(const translation_string **strings, int *num_strings);
-void translation_english(const translation_string **strings, int *num_strings);
-void translation_french(const translation_string **strings, int *num_strings);
-void translation_german(const translation_string **strings, int *num_strings);
-void translation_greek(const translation_string **strings, int *num_strings);
-void translation_italian(const translation_string **strings, int *num_strings);
-void translation_japanese(const translation_string **strings, int *num_strings);
-void translation_korean(const translation_string **strings, int *num_strings);
-void translation_polish(const translation_string **strings, int *num_strings);
-void translation_portuguese(const translation_string **strings, int *num_strings);
-void translation_russian(const translation_string **strings, int *num_strings);
-void translation_simplified_chinese(const translation_string **strings, int *num_strings);
-void translation_spanish(const translation_string **strings, int *num_strings);
-void translation_swedish(const translation_string **strings, int *num_strings);
-void translation_traditional_chinese(const translation_string **strings, int *num_strings);
-void translation_ukrainian(const translation_string **strings, int *num_strings);
-
 /* "New Game" strings in each language's .eng file encoding.
  * Previously defined in core/locale.c; consolidated here so that a single
  * table row captures everything required to support a language. */
@@ -41,6 +21,35 @@ static const uint8_t NEW_GAME_KOREAN[]             = { 0xbb, 0xf5, 0x20, 0xb0, 0
 static const uint8_t NEW_GAME_JAPANESE[]           = { 0x83, 0x6a, 0x83, 0x85, 0x81, 0x5b, 0x83, 0x51, 0x81, 0x5b, 0x83, 0x80, 0 };
 static const uint8_t NEW_GAME_CZECH[]              = { 0x4e, 0x6f, 0x76, 0xe1, 0x20, 0x68, 0x72, 0x61, 0 };
 static const uint8_t NEW_GAME_UKRAINIAN[]          = { 0xcd, 0xee, 0xe2, 0xe0, 0x20, 0xe3, 0xf0, 0xe0, 0 };
+
+/* Central list of supported languages.
+ * Each row is the single place where this file knows about a language:
+ * it drives both the loader declarations and the REGISTRY table. */
+#define LANGUAGE_REGISTRY_ENTRIES(X) \
+    X(ENGLISH,             english,             "English",             NEW_GAME_ENGLISH,             ENCODING_WESTERN_EUROPE,     0, 1, 50, 1, NULL,                        NULL) \
+    X(FRENCH,              french,              "French",              NEW_GAME_FRENCH,              ENCODING_WESTERN_EUROPE,     1, 1, 50, 1, NULL,                        NULL) \
+    X(GERMAN,              german,              "German",              NEW_GAME_GERMAN,              ENCODING_WESTERN_EUROPE,     1, 1, 50, 1, german_message_text_override, NULL) \
+    X(ITALIAN,             italian,             "Italian",             NEW_GAME_ITALIAN,             ENCODING_WESTERN_EUROPE,     1, 1, 50, 1, NULL,                        NULL) \
+    X(SPANISH,             spanish,             "Spanish",             NEW_GAME_SPANISH,             ENCODING_WESTERN_EUROPE,     1, 1, 50, 1, NULL,                        NULL) \
+    X(JAPANESE,            japanese,            "Japanese",            NEW_GAME_JAPANESE,            ENCODING_JAPANESE,           1, 1, 17, 0, NULL,                        NULL) \
+    X(KOREAN,              korean,              "Korean",              NEW_GAME_KOREAN,              ENCODING_KOREAN,             1, 0, 50, 0, NULL,                        korean_string_override) \
+    X(POLISH,              polish,              "Polish",              NEW_GAME_POLISH,              ENCODING_EASTERN_EUROPE,     1, 1, 50, 1, NULL,                        NULL) \
+    X(PORTUGUESE,          portuguese,          "Portuguese",          NEW_GAME_PORTUGUESE,          ENCODING_WESTERN_EUROPE,     1, 1, 50, 1, NULL,                        NULL) \
+    X(RUSSIAN,             russian,             "Russian",             NEW_GAME_RUSSIAN,             ENCODING_CYRILLIC,           1, 1, 50, 1, NULL,                        NULL) \
+    X(SWEDISH,             swedish,             "Swedish",             NEW_GAME_SWEDISH,             ENCODING_WESTERN_EUROPE,     1, 1, 50, 1, NULL,                        NULL) \
+    X(SIMPLIFIED_CHINESE,  simplified_chinese,  "Simplified Chinese",  NEW_GAME_SIMPLIFIED_CHINESE,  ENCODING_SIMPLIFIED_CHINESE, 1, 1, 50, 0, NULL,                        NULL) \
+    X(TRADITIONAL_CHINESE, traditional_chinese, "Traditional Chinese", NEW_GAME_TRADITIONAL_CHINESE, ENCODING_TRADITIONAL_CHINESE, 1, 1, 50, 0, NULL,                        NULL) \
+    X(CZECH,               czech,               "Czech",               NEW_GAME_CZECH,               ENCODING_CZECH,              1, 1, 50, 1, NULL,                        NULL) \
+    X(GREEK,               greek,               "Greek",               NEW_GAME_GREEK,               ENCODING_GREEK,              1, 1, 50, 1, NULL,                        NULL) \
+    X(UKRAINIAN,           ukrainian,           "Ukrainian",           NEW_GAME_UKRAINIAN,           ENCODING_CYRILLIC,           1, 1, 50, 1, NULL,                        NULL)
+
+/* Forward declarations for per-language translation loaders.
+ * These are intentionally NOT declared in translation.h — they are
+ * implementation details consumed exclusively by this registry. */
+#define DECLARE_TRANSLATION_LOADER(enum_suffix, loader_suffix, display_name, new_game, encoding, year_before_ad, translate_money_dn, paragraph_indent, translate_rank_autosaves, message_override, string_override) \
+    void translation_##loader_suffix(const translation_string **strings, int *num_strings);
+LANGUAGE_REGISTRY_ENTRIES(DECLARE_TRANSLATION_LOADER)
+#undef DECLARE_TRANSLATION_LOADER
 
 /* Content-patch hooks for specific languages.
  * These replace known erroneous strings in the original game data files
@@ -67,27 +76,14 @@ static const uint8_t *korean_string_override(int group, int index)
 /* Central language registry.
  * Columns: {type, name, new_game_bytes, encoding, loader,
  *           year_before_ad, translate_money_dn, paragraph_indent, translate_rank_autosaves,
- *           message_text_override, string_override}
- * Ordered to match the LANGUAGE_* enum in core/locale.h for clarity. */
+ *           message_text_override, string_override} */
+#define REGISTRY_ROW(enum_suffix, loader_suffix, display_name, new_game, encoding, year_before_ad, translate_money_dn, paragraph_indent, translate_rank_autosaves, message_override, string_override) \
+    { LANGUAGE_##enum_suffix, display_name, new_game, encoding, translation_##loader_suffix, year_before_ad, translate_money_dn, paragraph_indent, translate_rank_autosaves, message_override, string_override },
 static const language_info REGISTRY[] = {
-  /*                                                                                          yr  dn  indent  autosaves  msg_override             str_override */
-    { LANGUAGE_ENGLISH,             "English",            NEW_GAME_ENGLISH,            ENCODING_WESTERN_EUROPE,     translation_english,             0,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_FRENCH,              "French",             NEW_GAME_FRENCH,             ENCODING_WESTERN_EUROPE,     translation_french,              1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_GERMAN,              "German",             NEW_GAME_GERMAN,             ENCODING_WESTERN_EUROPE,     translation_german,              1,  1,  50,  1,  german_message_text_override,  NULL                  },
-    { LANGUAGE_ITALIAN,             "Italian",            NEW_GAME_ITALIAN,            ENCODING_WESTERN_EUROPE,     translation_italian,             1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_SPANISH,             "Spanish",            NEW_GAME_SPANISH,            ENCODING_WESTERN_EUROPE,     translation_spanish,             1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_JAPANESE,            "Japanese",           NEW_GAME_JAPANESE,           ENCODING_JAPANESE,           translation_japanese,            1,  1,  17,  0,  NULL,                         NULL                  },
-    { LANGUAGE_KOREAN,              "Korean",             NEW_GAME_KOREAN,             ENCODING_KOREAN,             translation_korean,              1,  0,  50,  0,  NULL,                         korean_string_override },
-    { LANGUAGE_POLISH,              "Polish",             NEW_GAME_POLISH,             ENCODING_EASTERN_EUROPE,     translation_polish,              1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_PORTUGUESE,          "Portuguese",         NEW_GAME_PORTUGUESE,         ENCODING_WESTERN_EUROPE,     translation_portuguese,          1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_RUSSIAN,             "Russian",            NEW_GAME_RUSSIAN,            ENCODING_CYRILLIC,           translation_russian,             1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_SWEDISH,             "Swedish",            NEW_GAME_SWEDISH,            ENCODING_WESTERN_EUROPE,     translation_swedish,             1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_SIMPLIFIED_CHINESE,  "Simplified Chinese", NEW_GAME_SIMPLIFIED_CHINESE, ENCODING_SIMPLIFIED_CHINESE, translation_simplified_chinese,  1,  1,  50,  0,  NULL,                         NULL                  },
-    { LANGUAGE_TRADITIONAL_CHINESE, "Traditional Chinese", NEW_GAME_TRADITIONAL_CHINESE, ENCODING_TRADITIONAL_CHINESE, translation_traditional_chinese, 1,  1,  50,  0,  NULL,                         NULL                  },
-    { LANGUAGE_CZECH,               "Czech",              NEW_GAME_CZECH,              ENCODING_CZECH,              translation_czech,               1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_GREEK,               "Greek",              NEW_GAME_GREEK,              ENCODING_GREEK,              translation_greek,               1,  1,  50,  1,  NULL,                         NULL                  },
-    { LANGUAGE_UKRAINIAN,           "Ukrainian",          NEW_GAME_UKRAINIAN,          ENCODING_CYRILLIC,           translation_ukrainian,           1,  1,  50,  1,  NULL,                         NULL                  },
+    LANGUAGE_REGISTRY_ENTRIES(REGISTRY_ROW)
 };
+#undef REGISTRY_ROW
+#undef LANGUAGE_REGISTRY_ENTRIES
 
 #define REGISTRY_COUNT (int)(sizeof(REGISTRY) / sizeof(language_info))
 
