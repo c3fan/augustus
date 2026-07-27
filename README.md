@@ -53,6 +53,8 @@ First, download the game for your platform from the list above.
 Alternatively, you can build Augustus yourself. Check [Building Julius](doc/BUILDING.md)
 for details.
 
+For a developer-oriented map of the engine, see [Architecture Reference](doc/ARCHITECTURE.md).
+
 Then you can either copy the game to the Caesar 3 folder, or run the game from an independent
 folder, in which case the game will ask you to point to the Caesar 3 folder.
 
